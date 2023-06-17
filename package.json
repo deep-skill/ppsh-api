@@ -4,6 +4,7 @@
   "description": "PPSH Api.",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/deep-skill/ppsh-api/issues"
   },
-  "homepage": "https://github.com/deep-skill/ppsh-api#readme"
+  "homepage": "https://github.com/deep-skill/ppsh-api#readme",
+  "dependencies": {
+    "dotenv": "^16.3.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
