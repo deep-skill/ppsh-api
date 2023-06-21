@@ -1,8 +1,9 @@
 const { Polygon, Point_polygon, Location } = require("../db");
 const getPolygon = require("./getPolygon.js");
+const probabilities = require("./probabilities.js");
+const interpolation = require("./interpolation.js");
 
-const standardE30_2003 = async (location, groundType) => {
-
+const standardE30_2015Spe = async (location, groundType) => {
   const location_data = await Location.findOne({
     where: { id: location },
   });
@@ -10,20 +11,20 @@ const standardE30_2003 = async (location, groundType) => {
   const long = location_data.longitude;
 
   const foundPolygons = await Polygon.findAll({
-    where: { type: 3 },
+    where: { type: 2 },
   });
   let polygons = [];
   for (const p of foundPolygons) {
     polygons.push(p.points.split("|"));
-  };
+  }
 
   const rawCoordinates = await Point_polygon.findAll({
-    where: { type: 3 },
+    where: { type: 2 },
   });
   let coordinates = [];
   for (const c of rawCoordinates) {
     coordinates.push([c.latitude, c.longitude]);
-  };
+  }
 
   const mainPolygon = getPolygon(lat, long);
   if (mainPolygon === -1) throw Error("polygon not found");
@@ -36,9 +37,15 @@ const standardE30_2003 = async (location, groundType) => {
     period.push(i);
   };
 
-  const Z_2003 = [0.15, 0.3, 0.4];
-  const Z_S_2003 = [1, 1.2, 1.4];
-  const Tp_2003 = [0.4, 0.6, 0.9];
+  
+  const Z_S_2015Spec = [
+    [0.8, 1, 1.6, 2],
+    [0.8, 1, 1.2, 1.4],
+    [0.8, 1, 1.15, 1.2],
+    [0.8, 1, 1.05, 1.1],
+  ];
+  const Tp_2015Spec = [0.3, 0.4, 0.6, 1];
+  const Tl_2015Spec = [3, 2.5, 2, 1.6];
 
   let zone;
   switch (mainPolygon) {
@@ -54,23 +61,33 @@ const standardE30_2003 = async (location, groundType) => {
     case 3:
       zone = 2;
       break;
+    case 4:
+      zone = 3;
+      break;
+    default:
+      break;
   };
+  
+  const prob = probabilities(location, period);
+  let PGA = interpolation(prob, (1.0 / 475.0));
+  if(PGA < 0.08) PGA = 0.08;
 
-  const S = Z_S_2003[groundType];
+  const S = Z_S_2015Spec[zone][groundType];
   const g = 1;
   const R = 1;
   const U = 1;
 
-  let spectrumE30_2003 = {};
+  let spectrumE30_2015Spec = {};
   period.forEach((T) => {
     let C;
-    if (2.5 * Tp_2003[groundType] > T) C = 2.5;
-    else C = (2.5 * Tp_2003[groundType]) / T;
+    if (T <= Tp_2015Spec[groundType]) C = 2.5;
+    if (T > Tp_2015Spec[groundType] && T < Tl_2015Spec[groundType]) C = (2.5 * Tp_2015Spec[groundType]) / T;
+    if (T >= Tl_2015Spec[groundType]) C = (2.5 * Tp_2015Spec[groundType] * Tl_2015Spec[groundType]) / (T * T);
 
-    spectrumE30_2003[String(T)] = (Z_2003[zone] * S * C * U * g) / R;
+    spectrumE30_2015Spec[String(T)] = (PGA * S * C * U * g) / R;
   });
 
-  return spectrumE30_2003;
+  return spectrumE30_2015Spec;
 };
 
-module.exports = standardE30_2003;
+module.exports = standardE30_2015Spe;
