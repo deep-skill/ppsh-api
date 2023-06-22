@@ -1,30 +1,27 @@
-/*
-hazard = [
-    {x:00, y:00},
-    {x:00, y:00},
-    {x:00, y:00},
-] 
-*/
-export const interpolation = (hazard, acceleration) => {
-	let _x = 0;
-	let _y = 0;
+// hazard = [{x:00, y:00},{x:00, y:00},{x:00, y:00},]
 
-	for (let index in hazard) {
-		const x = hazard[index]["x"];
-		const y = hazard[index]["y"];
+const interpolation = (hazard, acceleration) => {
+  let _x = 0;
+  let _y = 0;
 
-		if (index > 0) {
-			if (_y < acceleration && acceleration < y) {
-				const m = Math.log(_y / y) / Math.log(_x / x);
-				const k = _y / Math.pow(_x, m);
-				const probability = Math.exp(Math.log(acceleration / k) / m);
-				return probability;
-			}
-		}
+  for (let index in hazard) {
+    const x = hazard[index]["x"];
+    const y = hazard[index]["y"];
 
-		_x = x;
-		_y = y;
-	}
+    if (index > 0) {
+      if (_y < acceleration && acceleration < y) {
+        const m = Math.log(_y / y) / Math.log(_x / x);
+        const k = _y / Math.pow(_x, m);
+        const probability = Math.exp(Math.log(acceleration / k) / m);
+        return probability;
+      }
+    }
 
-	return 0;
+    _x = x;
+    _y = y;
+  }
+
+  return 0;
 };
+
+module.exports = interpolation;

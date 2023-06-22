@@ -1,18 +1,16 @@
-const e30_2003 = require("../helpers/e30_2003.js");
-const e30_2015 = require("../helpers/e30_2015.js");
-const e30_2015_esp = require("../helpers/e30_2015_esp.js");
-const ibc = require("../helpers/ibc.js");
+const standardE30_2003 = require("../helpers/standardE30_2003");
+const standardE30_2015 = require("../helpers/standardE30_2015");
+const standardE30_2015_esp = require("../helpers/standardE30_2015Spec");
+const ibc = require("../helpers/ibc");
 
-const getDesignSpectrum = async (location, type, ground) => {
+const getDesignSpectrum = async (location, type, soilType) => {
   const resultData = [];
   const result = [];
 
-  if (type === "e30_2003") resultData = await e30_2003(location, ground);
-  if (type === "e30_2015") resultData = await e30_2015(location, ground);
-  if (type === "e30_2015_esp")
-    resultData = await e30_2015_esp(location, ground);
-  if (type === "ibc" || type === "asce")
-    resultData = await ibc(location, ground);
+  if (type === "e30_2003") resultData = await standardE30_2003(location, soilType);
+  if (type === "e30_2015") resultData = await standardE30_2015(location, soilType);
+  if (type === "e30_2015_esp") resultData = await standardE30_2015_esp(location, soilType);
+  if (type === "ibc" || type === "asce") resultData = await ibc(location, soilType);
 
   for (const x in resultData) {
     const y = resultData[x];

@@ -1,4 +1,4 @@
-const { isInsidePolygon } = requier("./isInsidePolygon");
+const isInsidePolygon = require("./isInsidePolygon");
 
 const getPolygono = (latitude, longitude, polygons, coordinates) => {
   let polygon;
@@ -10,6 +10,4 @@ const getPolygono = (latitude, longitude, polygons, coordinates) => {
   return -1;
 };
 
-module.exports = {
-  getPolygono,
-};
+module.exports = getPolygono;

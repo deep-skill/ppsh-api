@@ -10,6 +10,4 @@ const getPeriodArray = () => {
   return period;
 };
 
-module.exports = {
-  getPeriodArray,
-};
+module.exports = getPeriodArray;

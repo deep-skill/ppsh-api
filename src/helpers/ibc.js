@@ -1,39 +1,5 @@
-import probabilities from "./probabilities";
-import interpolation from "./interpolation";
-
-export const ibc = (location, soilType) => {
-	let prob = probabilities(location, 0.2);
-	let Ss = interpolation(prob, 1.0 / 2500.0); //PGA1
-
-	let prob2 = probabilities(location, 1.0);
-	let Sl = interpolation(prob2, 1.0 / 2500.0); //PGA2
-
-	let Fv = fv(Sl, soilType);
-	let Fa = fa(Ss, soilType);
-
-	let Sml = Fv * Sl;
-	let Sms = Fa * Ss;
-
-	let Sdl = (2.0 / 3.0) * Sml;
-	let Sds = (2.0 / 3.0) * Sms;
-
-	let T0 = (Sdl / Sds) * 0.2;
-	let Ts = Sdl / Sds;
-
-	let ibcSpectrum = {};
-
-	for (let T = 0.0; T < 3.01; T += 0.01) {
-		if (T < T0) {
-			ibcSpectrum[T.toString()] = Sds * (0.4 + (0.6 * T) / T0);
-		} else if (T >= Ts) {
-			ibcSpectrum[T.toString()] = Sdl / T;
-		} else {
-			ibcSpectrum[T.toString()] = Sds;
-		}
-	}
-
-	return ibcSpectrum;
-};
+const interpolation = require("./interpolation");
+const probabilities = require("./probabilities");
 
 const fv = (Sl, tp) => {
 	const F = [
@@ -70,3 +36,39 @@ const fa = (Ss, tp) => {
 		return ((F[tp][3] - F[tp][4]) / 0.25) * (1.25 - Ss) + F[tp][4];
 	return F[tp][4];
 };
+
+const ibc = (location, soilType) => {
+	let prob = probabilities(location, 0.2);
+	let Ss = interpolation(prob, 1.0 / 2500.0); //PGA1
+
+	let prob2 = probabilities(location, 1.0);
+	let Sl = interpolation(prob2, 1.0 / 2500.0); //PGA2
+
+	let Fv = fv(Sl, soilType);
+	let Fa = fa(Ss, soilType);
+
+	let Sml = Fv * Sl;
+	let Sms = Fa * Ss;
+
+	let Sdl = (2.0 / 3.0) * Sml;
+	let Sds = (2.0 / 3.0) * Sms;
+
+	let T0 = (Sdl / Sds) * 0.2;
+	let Ts = Sdl / Sds;
+
+	let ibcSpectrum = {};
+
+	for (let T = 0.0; T < 3.01; T += 0.01) {
+		if (T < T0) {
+			ibcSpectrum[T.toString()] = Sds * (0.4 + (0.6 * T) / T0);
+		} else if (T >= Ts) {
+			ibcSpectrum[T.toString()] = Sdl / T;
+		} else {
+			ibcSpectrum[T.toString()] = Sds;
+		}
+	}
+
+	return ibcSpectrum;
+};
+
+module.exports = ibc;

@@ -1,9 +1,9 @@
-const { Polygon, Point_polygon, Location } = require("../db");
-const getPolygon = require("./getPolygon.js");
-const probabilities = require("./probabilities.js");
-const interpolation = require("./interpolation.js");
+const { Polygon, PolygonPoints, Location } = require("../db");
+const getPolygon = require("./getPolygon");
+const probabilities = require("./probabilities");
+const interpolation = require("./interpolation");
 
-const standardE30_2015Spe = async (location, groundType) => {
+const standardE30_2015Spe = async (location, soilType) => {
   const location_data = await Location.findOne({
     where: { id: location },
   });
@@ -18,7 +18,7 @@ const standardE30_2015Spe = async (location, groundType) => {
     polygons.push(p.points.split("|"));
   }
 
-  const rawCoordinates = await Point_polygon.findAll({
+  const rawCoordinates = await PolygonPoints.findAll({
     where: { type: 2 },
   });
   let coordinates = [];
@@ -72,7 +72,7 @@ const standardE30_2015Spe = async (location, groundType) => {
   let PGA = interpolation(prob, (1.0 / 475.0));
   if(PGA < 0.08) PGA = 0.08;
 
-  const S = Z_S_2015Spec[zone][groundType];
+  const S = Z_S_2015Spec[zone][soilType];
   const g = 1;
   const R = 1;
   const U = 1;
@@ -80,9 +80,9 @@ const standardE30_2015Spe = async (location, groundType) => {
   let spectrumE30_2015Spec = {};
   period.forEach((T) => {
     let C;
-    if (T <= Tp_2015Spec[groundType]) C = 2.5;
-    if (T > Tp_2015Spec[groundType] && T < Tl_2015Spec[groundType]) C = (2.5 * Tp_2015Spec[groundType]) / T;
-    if (T >= Tl_2015Spec[groundType]) C = (2.5 * Tp_2015Spec[groundType] * Tl_2015Spec[groundType]) / (T * T);
+    if (T <= Tp_2015Spec[soilType]) C = 2.5;
+    if (T > Tp_2015Spec[soilType] && T < Tl_2015Spec[soilType]) C = (2.5 * Tp_2015Spec[soilType]) / T;
+    if (T >= Tl_2015Spec[soilType]) C = (2.5 * Tp_2015Spec[soilType] * Tl_2015Spec[soilType]) / (T * T);
 
     spectrumE30_2015Spec[String(T)] = (PGA * S * C * U * g) / R;
   });

@@ -1,9 +1,9 @@
-const { Polygon, Point_polygon, Location, W_one, Zer0, Zer1, Zer2, Zer3, Zer4,
-    Zer5, Zer6, Zer7} = require("../models");
+const { Polygon, PolygonPoints, Location, W_one, Zer0, Zer1, Zer2, Zer3, Zer4,
+    Zer5, Zer6, Zer7} = require("../db");
+const getPolygon = require("./getPolygon")    ;
 
-const {getPolygon} = require("./getPolygon")    
 
-export const probabilities = async (location, periodo)=>{
+const probabilities = async (location, periodo)=>{
     let coordinates_data;
     let coordinates = [];
     let polygons_data;
@@ -28,8 +28,8 @@ export const probabilities = async (location, periodo)=>{
         const latitude = location_data.latitude;
         const longitude = location_data.longitude;
 
-        //find in the Point_polygon table, all result with type 1
-        coordinates_data = await Point_polygon.findAll({where:{type: 1}});
+        //find in the PolygonPoints table, all result with type 1
+        coordinates_data = await PolygonPoints.findAll({where:{type: 1}});
 
         if(!coordinates_data) throw new Error("coordinates not found");
 
@@ -65,8 +65,8 @@ export const probabilities = async (location, periodo)=>{
                                 pond.Y_ab,
                                 pond.Y_bc);
         };
-        //find in the Point_polygon table, all result with type 1
-        coordinates_data = await Point_polygon.findAll({where:{type: 4}});
+        //find in the PolygonPoints table, all result with type 1
+        coordinates_data = await PolygonPoints.findAll({where:{type: 4}});
 
         if(!coordinates_data) throw new Error("coordinates not found");
 
@@ -139,4 +139,6 @@ export const probabilities = async (location, periodo)=>{
     }catch(error){
         return error;
     }
-}
+};
+
+module.exports = probabilities;

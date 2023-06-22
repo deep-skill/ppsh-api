@@ -1,4 +1,4 @@
-const { PolygonPoints } = require("../models/PolygonPoints");
+const { PolygonPoints } = require("../db");
 
 const getDBCoordinates = async (type) => {
   let coordinates_data;
@@ -13,12 +13,9 @@ const getDBCoordinates = async (type) => {
     }
 
     return coordinates;
-    
   } catch (error) {
     return error;
   }
 };
 
-module.exports = {
-  getDBCoordinates,
-};
+module.exports = getDBCoordinates;

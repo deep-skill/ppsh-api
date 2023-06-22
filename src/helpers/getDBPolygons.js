@@ -1,4 +1,4 @@
-const { Polygon } = require("../models/Polygon");
+const { Polygon } = require("../db");
 
 const getDBPolygons = async (type) => {
   let polygonsData;
@@ -19,6 +19,4 @@ const getDBPolygons = async (type) => {
   }
 };
 
-module.exports = {
-  getDBPolygons,
-};
+module.exports = getDBPolygons;
