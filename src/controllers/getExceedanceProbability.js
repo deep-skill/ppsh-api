@@ -1,4 +1,4 @@
-const probabilities = require("../helpers/probabilities.js");
+const probabilities = require("../helpers/probabilities");
 
 const getExceedanceProbability = async (location, period) => {
   const result = await probabilities(location, period);

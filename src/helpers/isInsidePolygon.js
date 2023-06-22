@@ -1,4 +1,5 @@
 const isInsidePolygon = async (lat, long, k, polygons, coordinates) => {
+  
   const nVert = polygons[k].length;
   const testY = lat;
   const testX = long;

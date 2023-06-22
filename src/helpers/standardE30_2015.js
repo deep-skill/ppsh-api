@@ -1,7 +1,7 @@
-const { Polygon, Point_polygon, Location } = require("../db");
-const getPolygon = require("./getPolygon.js");
+const { Polygon, PolygonPoints, Location } = require("../db");
+const getPolygon = require("./getPolygon");
 
-const standardE30_2015 = async (location, groundType) => {
+const standardE30_2015 = async (location, soilType) => {
   const location_data = await Location.findOne({
     where: { id: location },
   });
@@ -16,7 +16,7 @@ const standardE30_2015 = async (location, groundType) => {
     polygons.push(p.points.split("|"));
   }
 
-  const rawCoordinates = await Point_polygon.findAll({
+  const rawCoordinates = await PolygonPoints.findAll({
     where: { type: 2 },
   });
   let coordinates = [];
@@ -66,7 +66,7 @@ const standardE30_2015 = async (location, groundType) => {
       break;
   };
 
-  const S = Z_S_2015[zone][groundType];
+  const S = Z_S_2015[zone][soilType];
   const g = 1;
   const R = 1;
   const U = 1;
@@ -74,9 +74,9 @@ const standardE30_2015 = async (location, groundType) => {
   let spectrumE30_2015 = {};
   period.forEach((T) => {
     let C;
-    if (T <= Tp_2015[groundType]) C = 2.5;
-    if (T > Tp_2015[groundType] && T < Tl_2015[groundType]) C = (2.5 * Tp_2015[groundType]) / T;
-    if (T >= Tl_2015[groundType]) C = (2.5 * Tp_2015[groundType] * Tl_2015[groundType]) / (T * T);
+    if (T <= Tp_2015[soilType]) C = 2.5;
+    if (T > Tp_2015[soilType] && T < Tl_2015[soilType]) C = (2.5 * Tp_2015[soilType]) / T;
+    if (T >= Tl_2015[soilType]) C = (2.5 * Tp_2015[soilType] * Tl_2015[soilType]) / (T * T);
 
     spectrumE30_2015[String(T)] = (Z_2015[zone] * S * C * U * g) / R;
   });

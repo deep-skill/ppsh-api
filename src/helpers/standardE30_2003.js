@@ -1,7 +1,7 @@
-const { Polygon, Point_polygon, Location } = require("../db");
-const getPolygon = require("./getPolygon.js");
+const { Polygon, PolygonPoints, Location } = require("../db");
+const getPolygon = require("./getPolygon");
 
-const standardE30_2003 = async (location, groundType) => {
+const standardE30_2003 = async (location, soilType) => {
 
   const location_data = await Location.findOne({
     where: { id: location },
@@ -17,7 +17,7 @@ const standardE30_2003 = async (location, groundType) => {
     polygons.push(p.points.split("|"));
   };
 
-  const rawCoordinates = await Point_polygon.findAll({
+  const rawCoordinates = await PolygonPoints.findAll({
     where: { type: 3 },
   });
   let coordinates = [];
@@ -56,7 +56,7 @@ const standardE30_2003 = async (location, groundType) => {
       break;
   };
 
-  const S = Z_S_2003[groundType];
+  const S = Z_S_2003[soilType];
   const g = 1;
   const R = 1;
   const U = 1;
@@ -64,8 +64,8 @@ const standardE30_2003 = async (location, groundType) => {
   let spectrumE30_2003 = {};
   period.forEach((T) => {
     let C;
-    if (2.5 * Tp_2003[groundType] > T) C = 2.5;
-    else C = (2.5 * Tp_2003[groundType]) / T;
+    if (2.5 * Tp_2003[soilType] > T) C = 2.5;
+    else C = (2.5 * Tp_2003[soilType]) / T;
 
     spectrumE30_2003[String(T)] = (Z_2003[zone] * S * C * U * g) / R;
   });
