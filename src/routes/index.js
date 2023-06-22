@@ -1,1 +1,8 @@
-// modularizacion de las rutas
+const { Router } = require("express");
+const router = Router();
+
+router.get("/", (req, res) => {
+  res.send("Is working");
+});
+
+module.exports = router;
