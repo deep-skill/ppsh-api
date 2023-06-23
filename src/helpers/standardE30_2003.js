@@ -3,11 +3,11 @@ const getPolygon = require("./getPolygon");
 
 const standardE30_2003 = async (location, soilType) => {
 
-  const location_data = await Location.findOne({
+  const locationData = await Location.findOne({
     where: { id: location },
   });
-  const lat = location_data.latitude;
-  const long = location_data.longitude;
+  const lat = locationData.latitude;
+  const long = locationData.longitude;
 
   const foundPolygons = await Polygon.findAll({
     where: { type: 3 },
