@@ -20,10 +20,12 @@ module.exports = (sequelize) => {
       polygon: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        field: "pol"
       },
     },
     {
       timestamps: false,
+      tableName: "location"
     }
   );
 };

@@ -12,6 +12,7 @@ module.exports = (sequelize) => {
       period: {
         type: DataTypes.STRING(5),
         defaultValue: null,
+        field: "Periodo"
       },
       X: {
         type: DataTypes.STRING(10),
@@ -40,6 +41,7 @@ module.exports = (sequelize) => {
     },
     {
       timestamps: false,
+      tableName: "zer4"
     }
   );
 };
