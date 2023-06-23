@@ -1,5 +1,3 @@
-// hazard = [{x:00, y:00},{x:00, y:00},{x:00, y:00},]
-
 const interpolation = (hazard, acceleration) => {
   let _x = 0;
   let _y = 0;
