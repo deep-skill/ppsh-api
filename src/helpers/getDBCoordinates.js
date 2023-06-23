@@ -1,14 +1,14 @@
 const { PolygonPoints } = require("../db");
 
 const getDBCoordinates = async (type) => {
-  let coordinates_data;
+  let coordinatesData;
   let coordinates;
   try {
-    coordinates_data = await PolygonPoints.findAll({ where: { type: type } });
+    coordinatesData = await PolygonPoints.findAll({ where: { type: type } });
 
-    if (!coordinates_data) throw new Error("coordinates not found");
+    if (!coordinatesData) throw new Error("coordinates not found");
 
-    for (const coord of coordinates_data) {
+    for (const coord of coordinatesData) {
       coordinates.push(coord.latitude, coord.longitude);
     }
 

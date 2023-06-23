@@ -4,11 +4,11 @@ const probabilities = require("./probabilities");
 const interpolation = require("./interpolation");
 
 const standardE30_2015Spe = async (location, soilType) => {
-  const location_data = await Location.findOne({
+  const locationData = await Location.findOne({
     where: { id: location },
   });
-  const lat = location_data.latitude;
-  const long = location_data.longitude;
+  const lat = locationData.latitude;
+  const long = locationData.longitude;
 
   const foundPolygons = await Polygon.findAll({
     where: { type: 2 },
