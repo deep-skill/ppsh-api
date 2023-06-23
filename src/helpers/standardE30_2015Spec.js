@@ -26,7 +26,7 @@ const standardE30_2015Spe = async (location, soilType) => {
     coordinates.push([c.latitude, c.longitude]);
   }
 
-  const mainPolygon = getPolygon(lat, long);
+  const mainPolygon = getPolygon(lat, long,  polygons, coordinates);
   if (mainPolygon === -1) throw Error("polygon not found");
 
   let period = [0.0, 0.05, 0.075];
