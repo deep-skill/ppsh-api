@@ -23,6 +23,7 @@ module.exports = (sequelize) => {
         }
     },
         {
-            timestamps: false
+            timestamps: false,
+            tableName: "point_polygon"
         });
 };
