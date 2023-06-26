@@ -1,13 +1,13 @@
-const { Polygon, PolygonPoints, Location, W_one, Zer0, Zer1, Zer2, Zer3, Zer4,
+const { Location, W_one, Zer0, Zer1, Zer2, Zer3, Zer4,
     Zer5, Zer6, Zer7} = require("../db");
-const getPolygon = require("./getPolygon")    ;
+const getPolygon = require("./getPolygon");
+const getDBCoordinates = require("./getDBCoordinates");
+const getDBPolygons = require("./getDBPolygons");
 
 
 const probabilities = async (location, period)=>{
 
-  let coordinatesData;
   let coordinates = [];
-  let polygonsData;
   let polygons = [];
   let zer_data;
   let sum;
@@ -19,8 +19,6 @@ const probabilities = async (location, period)=>{
 	let Y_ab = [];
 	let Y_bc = [];
 
-    
-
   const locationData = await Location.findByPk(location);
 
   if (!locationData) throw new Error("Location not found");
@@ -28,53 +26,29 @@ const probabilities = async (location, period)=>{
   const latitude = locationData.latitude;
   const longitude = locationData.longitude;
 
-  coordinatesData = await PolygonPoints.findAll({ where: { type: 1 } });
+  coordinates = await getDBCoordinates(1);
 
-  if (!coordinatesData) throw new Error("Coordinates not found");
-
-  for (const coord of coordinatesData) {
-    coordinates.push(coord.latitude, coord.longitude);
-  }
-
-  polygonsData = await Polygon.findAll({ where: { type: 1 } });
-
-  if (!polygonsData) throw new Error("Polygons not found");
-
-  for (const pol of polygonsData) {
-    polygons.push(pol.point.split("|"));
-  }
+  polygons = await getDBPolygons(1);
 
   const polygon = getPolygon(latitude, longitude, polygons, coordinates);
 
   if (polygon === -1) throw new Error("Polygon not found");
 
-  const ponderationsData = W_one.findAll();
+  const ponderationsData = await W_one.findAll();
   
+  if (ponderationsData < 0) throw new Error("Ponderations not found");
+
   let ponderations = [];
 
   for (const pond of ponderationsData) {
-    ponderations.push(pond.Y_y, pond.Y_z, pond.Y_mc, pond.Y_ab, pond.Y_bc);
+    ponderations.push([pond.Y_y, pond.Y_z, pond.Y_mc, pond.Y_ab, pond.Y_bc]);
   }
 
-  coordinatesData = await PolygonPoints.findAll({ where: { type: 4 } });
-  
-  if (!coordinatesData) throw new Error("Coordinates not found");
+  coordinates = await getDBCoordinates(4);
 
-  coordinates = [];
-  for (const coord of coordinatesData) {
-    coordinates.push(coord.latitude, coord.longitude);
-  }
+  polygons = await getDBPolygons(4);
 
-  polygonsData = await Polygon.findAll({ where: { type: 4 } });
-
-  if (!polygonsData) throw new Error("Polygons not found");
-
-  polygons = [];
-  for (const pol of polygonsData) {
-    polygons.push(pol.point.split("|"));
-  }
-
-  const polygon2 = await getPolygon(
+  const polygon2 = getPolygon(
     latitude,
     longitude,
     polygons,

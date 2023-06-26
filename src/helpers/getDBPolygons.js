@@ -9,7 +9,7 @@ const getDBPolygons = async (type) => {
     if (!polygonsData) throw new Error("Polygons not found");
 
     for (const polygon of polygonsData) {
-      polygons.push(polygon.point.split("|"));
+      polygons.push([polygon.points.split("|")]);
     }
 
     return polygons;
