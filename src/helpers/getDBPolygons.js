@@ -7,7 +7,7 @@ const getDBPolygons = async (type) => {
   try {
     polygonsData = await Polygon.findAll({ where: { type: type } });
 
-    if (polygonsData.length < 1) throw new Error("Polygons not found");
+    if (polygonsData.length < 1) throw {status: 404, message: "There is no information in the DB with this type."};
 
     for (const polygon of polygonsData) {
       polygons.push(polygon.points.split("|"));
@@ -15,7 +15,7 @@ const getDBPolygons = async (type) => {
 
     return polygons;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 

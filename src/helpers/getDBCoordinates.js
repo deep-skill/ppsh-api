@@ -7,7 +7,7 @@ const getDBCoordinates = async (type) => {
   try {
     coordinatesData = await PolygonPoints.findAll({ where: { type: type } });
 
-    if (coordinatesData.length < 1) throw new Error("Coordinates not found");
+    if (coordinatesData.length < 1) throw {status: 404, message: "There is no information in the DB with this type"};
 
     for (const coord of coordinatesData) {
       coordinates.push([coord.latitude, coord.longitude]);
@@ -16,7 +16,7 @@ const getDBCoordinates = async (type) => {
     return coordinates;
 
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 

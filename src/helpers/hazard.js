@@ -1,7 +1,7 @@
 const interpolation = require("./interpolation");
 const probabilities = require("./probabilities");
 
-const hazard = (location, tr) => {
+const hazard = async (location, tr) => {
   let period = [0.0, 0.05, 0.075];
   let hazard = {};
 
@@ -14,7 +14,7 @@ const hazard = (location, tr) => {
   }
 
   for (let i = 0; i < period.length; i++) {
-    let probability = probabilities(location, period[i]);
+    let probability = await probabilities(location, period[i]);
     hazard[period[i].toString()] = interpolation(probability, 1 / tr);
   }
 

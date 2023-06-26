@@ -22,7 +22,7 @@ const probabilities = async (location, period) => {
   try {
     const locationData = await Location.findByPk(location);
 
-    if (!locationData) throw new Error("Location not found");
+    if (!locationData) throw {status: 404, message: "There is no information in the DB with this location ID"};
 
     const latitude = locationData.latitude;
     const longitude = locationData.longitude;
@@ -33,11 +33,11 @@ const probabilities = async (location, period) => {
 
     const polygon = getPolygon(latitude, longitude, polygons, coordinates);
 
-    if (polygon === -1) throw new Error("Polygon not found");
+    if (polygon === -1) throw {status: 404, message: "There is no information in the DB with this latitude, longitude, polygons or coordinates"};
 
     const ponderationsData = await W_one.findAll();
 
-    if (ponderationsData < 0) throw new Error("Ponderations not found");
+    if (ponderationsData.length < 0) throw {status: 404, message: "There is no information in the DB"};
 
     let ponderations = [];
 
@@ -56,7 +56,7 @@ const probabilities = async (location, period) => {
       coordinates
     );
 
-    if (polygon2 === -1) throw new Error("Polygon not found");
+    if (polygon2 === -1) throw {status: 404, message: "There is no information in the DB with this latitude, longitude, polygons or coordinates"};
 
     switch (polygon2) {
       case 0:
@@ -100,10 +100,10 @@ const probabilities = async (location, period) => {
         });
         break;
       default:
-        throw new Error("Polygon is out of parameters");
+        throw {status: 404, message: "There is no information in the DB with this location or period"};
     }
 
-    if (!zer_data) throw new Error("Information not found");
+    // if (!zer_data) throw {status: 404, message: "There is no information in the DB with this location or period"};
 
     for (const data of zer_data) {
       X.push(data.X);
@@ -129,7 +129,7 @@ const probabilities = async (location, period) => {
     return result;
 
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 

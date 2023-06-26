@@ -25,7 +25,7 @@ const standardE30_2015 = async (location, soilType) => {
   }
 
   const mainPolygon = getPolygon(lat, long, polygons, coordinates);
-  if (mainPolygon === -1) throw Error("polygon not found");
+  if (mainPolygon === -1) throw {status: 404, message: "There is no information in the DB with this lat, long, polygons or coordinates"};
 
   let period = [0.0, 0.05, 0.075];
   for (let i = 0.1; i < 1.0; i += 0.05) {
@@ -78,7 +78,7 @@ const standardE30_2015 = async (location, soilType) => {
     if (T > Tp_2015[soilType] && T < Tl_2015[soilType]) C = (2.5 * Tp_2015[soilType]) / T;
     if (T >= Tl_2015[soilType]) C = (2.5 * Tp_2015[soilType] * Tl_2015[soilType]) / (T * T);
 
-    spectrumE30_2015[String(T)] = (Z_2015[zone] * S * C * U * g) / R;
+    spectrumE30_2015[T.toString()] = (Z_2015[zone] * S * C * U * g) / R;
   });
 
   return spectrumE30_2015;

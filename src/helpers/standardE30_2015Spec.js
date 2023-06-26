@@ -27,7 +27,7 @@ const standardE30_2015Spe = async (location, soilType) => {
   }
 
   const mainPolygon = getPolygon(lat, long,  polygons, coordinates);
-  if (mainPolygon === -1) throw Error("polygon not found");
+  if (mainPolygon === -1) throw {status: 404, message: "There is no information in the DB with this lat, long, polygons or coordinates"};
 
   let period = [0.0, 0.05, 0.075];
   for (let i = 0.1; i < 1.0; i += 0.05) {
@@ -68,7 +68,7 @@ const standardE30_2015Spe = async (location, soilType) => {
       break;
   };
   
-  const prob = probabilities(location, period);
+  const prob = await probabilities(location, period);
   let PGA = interpolation(prob, (1.0 / 475.0));
   if(PGA < 0.08) PGA = 0.08;
 
@@ -84,7 +84,7 @@ const standardE30_2015Spe = async (location, soilType) => {
     if (T > Tp_2015Spec[soilType] && T < Tl_2015Spec[soilType]) C = (2.5 * Tp_2015Spec[soilType]) / T;
     if (T >= Tl_2015Spec[soilType]) C = (2.5 * Tp_2015Spec[soilType] * Tl_2015Spec[soilType]) / (T * T);
 
-    spectrumE30_2015Spec[String(T)] = (PGA * S * C * U * g) / R;
+    spectrumE30_2015Spec[T.toString()] = (PGA * S * C * U * g) / R;
   });
 
   return spectrumE30_2015Spec;
