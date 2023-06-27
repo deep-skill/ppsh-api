@@ -1,17 +1,11 @@
 const interpolation = require("./interpolation");
 const probabilities = require("./probabilities");
+const getPeriodArray = require("./getPeriodArray");
 
 const hazard = async (location, tr) => {
-  let period = [0.0, 0.05, 0.075];
+  let period = getPeriodArray()
+
   let hazard = {};
-
-  for (let i = 0.1; i < 1.0; i += 0.05) {
-    period.push(i);
-  }
-
-  for (let i = 1.0; i < 3.1; i += 0.1) {
-    period.push(i);
-  }
 
   for (let i = 0; i < period.length; i++) {
     let probability = await probabilities(location, period[i]);
