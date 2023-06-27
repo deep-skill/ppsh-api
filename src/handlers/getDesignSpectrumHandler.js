@@ -7,12 +7,12 @@ const getDesignSpectrumHandler = async (req, res) => {
     if (!location || !standardType || !soilType) throw { status: 400, message: "Missing location, standard type, or soil type information" };
     
     const response = await getDesignSpectrum(location, standardType, soilType);
-    if (!response) throw { status: 404, message: "There is no information in the DB with this location, standardType or soilType", };
+    if (!response) throw { status: 404, message: "There is no information in the DB with this location, standardType or soilType" };
     
     const result = {
       status: "success",
       data: response,
-      total: response ? 1 : 0
+      total: response.length
     };
 
     return res.status(200).json(result);
