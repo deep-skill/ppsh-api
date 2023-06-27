@@ -4,8 +4,8 @@ const standardE30_2015_esp = require("../helpers/standardE30_2015Spec");
 const ibc = require("../helpers/ibc");
 
 const getDesignSpectrum = async (location, type, soilType) => {
-  const resultData = [];
-  const result = [];
+  let resultData = [];
+  let result = [];
 
   if (type === "e30_2003") resultData = await standardE30_2003(location, soilType);
   if (type === "e30_2015") resultData = await standardE30_2015(location, soilType);
