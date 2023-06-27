@@ -9,11 +9,10 @@ const getLocationsHandler = async (req, res) => {
     const response = await getLocations(lat, long);
 
     if (!response) throw { status: 404, message: "There is no information in the DB with this latitude or longitude" };
-    console.log(response);
 
     const result = {
       status: "success",
-      data: response,
+      data: response.id,
       total: response ? 1 : 0 //response format for current front with jquery
     };
 
