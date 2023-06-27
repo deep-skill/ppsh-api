@@ -1,7 +1,15 @@
 const probabilities = require("../helpers/probabilities");
 
 const getExceedanceProbability = async (location, period) => {
-  const result = await probabilities(location, period);
+  let fixedPeriod;
+
+  if(period === "0.00") {
+    fixedPeriod = parseInt(period);
+  }else {
+    fixedPeriod = period;
+  }
+
+  const result = await probabilities(location, fixedPeriod);
 
   return result;
 };

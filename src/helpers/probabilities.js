@@ -123,7 +123,7 @@ const probabilities = async (location, period) => {
         ponderations[polygon][3] * Y_ab[i] +
         ponderations[polygon][4] * Y_bc[i];
       sum = sum.toFixed(8);
-      result.push({ x: X[i] / 981, y: sum });
+      result.push({ x: +(X[i] / 981).toFixed(4), y: +sum });
     }
 
     return result;
