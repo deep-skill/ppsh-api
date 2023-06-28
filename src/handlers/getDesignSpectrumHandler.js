@@ -11,7 +11,7 @@ const getDesignSpectrumHandler = async (req, res) => {
     
     const result = {
       status: "success",
-      data: response,
+      data: response.sort((a,b) => +a.x - +b.x),
       total: response.length
     };
 
