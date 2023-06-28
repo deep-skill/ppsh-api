@@ -16,11 +16,11 @@ describe("Route GET '/hazardspectrum' status codes", () => {
     expect(res.body).toBeInstanceOf(Object);
   });
 
-  test("If location or tr are not in DB should be 404", async () => {
+  test("If 'tr' are higher than 10.000, should be 400", async () => {
     const res = await request(app)
       .get("/psp/hazardspectrum?location=0&tr=10009")
       .send();
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(400);
     expect(res.body).toBeInstanceOf(Object);
   });
 });

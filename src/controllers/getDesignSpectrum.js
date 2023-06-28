@@ -7,17 +7,30 @@ const getDesignSpectrum = async (location, type, soilType) => {
   let resultData = [];
   let result = [];
 
-  if (type === "e30_2003") resultData = await standardE30_2003(location, soilType);
-  if (type === "e30_2015") resultData = await standardE30_2015(location, soilType);
-  if (type === "e30_2015_esp") resultData = await standardE30_2015_esp(location, soilType);
-  if (type === "ibc" || type === "asce") resultData = await ibc(location, soilType);
+  try {
 
-  for (const x in resultData) {
-    const y = resultData[x];
-    result.push({ x: x, y: y });
+    if (type === "e30_2003" && soilType < 3) {
+      resultData = await standardE30_2003(location, soilType);
+    } else if (type === "e30_2015" && soilType < 4) {
+      resultData = await standardE30_2015(location, soilType);
+    } else if (type === "e30_2015_esp" && soilType < 4) {
+      resultData = await standardE30_2015_esp(location, soilType);
+    } else if ((type === "ibc" && soilType < 5) || (type === "asce" && soilType < 5)) {
+      resultData = await ibc(location, soilType);
+    } else {
+      throw { status: 400, message: "The provided soilType or standardType is invalid" };
+    }
+
+    for (const x in resultData) {
+      const y = resultData[x];
+      result.push({ x: x, y: y });
+    }
+
+    return result;
+
+  } catch (error) {
+    throw error;
   }
-
-  return result;
 };
 
 module.exports = getDesignSpectrum;
