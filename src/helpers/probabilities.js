@@ -18,6 +18,7 @@ const probabilities = async (location, period) => {
   let Y_mc = [];
   let Y_ab = [];
   let Y_bc = [];
+  let Y = [];
 
   try {
     const locationData = await Location.findByPk(location);
@@ -103,7 +104,7 @@ const probabilities = async (location, period) => {
         throw {status: 404, message: "There is no information in the DB with this location or period"};
     }
 
-    // if (!zer_data) throw {status: 404, message: "There is no information in the DB with this location or period"};
+    if (!zer_data) throw {status: 404, message: "There is no information in the DB with this location or period"};
 
     for (const data of zer_data) {
       X.push(data.X);
@@ -112,18 +113,19 @@ const probabilities = async (location, period) => {
       Y_mc.push(data.Y_mc);
       Y_ab.push(data.Y_ab);
       Y_bc.push(data.Y_bc);
+      Y.push(data.Y_y);
     }
 
-
     for (let i = 0; i < 20; i++) {
-      sum =
-        ponderations[polygon][0] * Y_y[i] +
-        ponderations[polygon][1] * Y_z[i] +
-        ponderations[polygon][2] * Y_mc[i] +
-        ponderations[polygon][3] * Y_ab[i] +
-        ponderations[polygon][4] * Y_bc[i];
-      sum = sum.toFixed(8);
-      result.push({ x: +(X[i] / 981).toFixed(4), y: +sum });
+      // sum =
+      //   Number((ponderations[polygon][0] * Y_y[i]).toFixed(6)) +
+      //   Number((ponderations[polygon][1] * Y_z[i]).toFixed(6)) +
+      //   Number((ponderations[polygon][2] * Y_mc[i]).toFixed(6)) +
+      //   Number((ponderations[polygon][3] * Y_ab[i]).toFixed(6)) +
+      //   Number((ponderations[polygon][4] * Y_bc[i]).toFixed(6));
+      // // console.log(sum);
+      // sum = sum.toFixed(8);
+      result.push({ x: +(X[i] / 981), y: Number(Y[i]) });
     }
 
     return result;
