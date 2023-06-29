@@ -49,7 +49,7 @@ const standardE30_2003 = async (location, soilType) => {
     let spectrumE30_2003 = {};
     period.forEach((T) => {
       let C;
-      if (2.5 * Tp_2003[soilType] > T) C = 2.5;
+      if (2.5 * Tp_2003[soilType] > T * 2.5) C = 2.5;
       else C = (2.5 * Tp_2003[soilType]) / T;
 
       spectrumE30_2003[T.toString()] = (Z_2003[zone] * S * C * U * g) / R;
