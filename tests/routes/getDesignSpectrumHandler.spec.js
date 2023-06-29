@@ -181,6 +181,58 @@ describe(`Route GET '/desingspectrum' ibc status codes `, () => {
   });
 });
 
+describe(`Route GET '/desingspectrum' asce status codes `, () => {
+  test("Request with asce: type= 2", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=6&standardType=asce&soilType=2"
+    );
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+  test("Request with asce: type= 0", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=6&standardType=asce&soilType=0"
+    );
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+  test("Request with asce: type= 1", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=8800&standardType=asce&soilType=1"
+    );
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+  test("Request with asce: type= 3", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=8800&standardType=asce&soilType=3"
+    );
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+  test("Request with asce: type= 4", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=8800&standardType=asce&soilType=4"
+    );
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+  test("Bad request with asce: type= 5", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=8800&standardType=asce&soilType=5"
+    );
+    expect(res.status).toBe(400);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+  test("Bad request with asce: location= 0", async () => {
+    const res = await request(app).get(
+      "/psp/designspectrum?location=0&standardType=asce&soilType=1"
+    );
+    expect(res.status).toBe(404);
+    expect(res.body).toBeInstanceOf(Object);
+  });
+});
+
 describe(`Route GET '/desingspectrum'`, () => {
   test(`If there's not data from query`, async () => {
     const res = await request(app).get("/psp/designspectrum").send();

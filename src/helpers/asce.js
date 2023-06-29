@@ -45,8 +45,8 @@ const asce = async (location, soilType) => {
   let Ss = interpolation(prob, 1.0 / 2475.0); //PGA1
 
   let prob2 = await probabilities(location, 1.0);
-  let Sl = interpolation(prob2, 1.0 / 2500.0); //PGA2
-  if (Sl < 0.08) Sl = 0.08;
+  let Sl = interpolation(prob2, 1.0 / 2475.0); //PGA2
+  
 
   let Fv = fvAsce(Sl, soilType);
   let Fa = faAsce(Ss, soilType);
