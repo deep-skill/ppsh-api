@@ -10,14 +10,14 @@ const probabilities = async (location, period) => {
   let coordinates = [];
   let polygons = [];
   let zer_data;
-  let sum;
+  // let sum;
   let result = [];
   let X = [];
-  let Y_y = [];
-  let Y_z = [];
-  let Y_mc = [];
-  let Y_ab = [];
-  let Y_bc = [];
+  // let Y_y = [];
+  // let Y_z = [];
+  // let Y_mc = [];
+  // let Y_ab = [];
+  // let Y_bc = [];
   let Y = [];
 
   try {
@@ -36,15 +36,15 @@ const probabilities = async (location, period) => {
 
     if (polygon === -1) throw {status: 404, message: "There is no information in the DB with this latitude, longitude, polygons or coordinates"};
 
-    const ponderationsData = await W_one.findAll();
+    // const ponderationsData = await W_one.findAll();
 
-    if (ponderationsData.length < 0) throw {status: 404, message: "There is no information in the DB"};
+    // if (ponderationsData.length < 0) throw {status: 404, message: "There is no information in the DB"};
 
-    let ponderations = [];
+    // let ponderations = [];
 
-    for (const pond of ponderationsData) {
-      ponderations.push([pond.Y_y, pond.Y_z, pond.Y_mc, pond.Y_ab, pond.Y_bc]);
-    }
+    // for (const pond of ponderationsData) {
+    //   ponderations.push([pond.Y_y, pond.Y_z, pond.Y_mc, pond.Y_ab, pond.Y_bc]);
+    // }
 
     coordinates = await getDBCoordinates(4);
 
@@ -104,15 +104,15 @@ const probabilities = async (location, period) => {
         throw {status: 404, message: "There is no information in the DB with this location or period"};
     }
 
-    if (!zer_data) throw {status: 404, message: "There is no information in the DB with this location or period"};
+    if (zer_data.length < 1) throw {status: 404, message: "There is no information in the DB with this location or period"};
 
     for (const data of zer_data) {
       X.push(data.X);
-      Y_y.push(data.Y_y);
-      Y_z.push(data.Y_z);
-      Y_mc.push(data.Y_mc);
-      Y_ab.push(data.Y_ab);
-      Y_bc.push(data.Y_bc);
+      // Y_y.push(data.Y_y);
+      // Y_z.push(data.Y_z);
+      // Y_mc.push(data.Y_mc);
+      // Y_ab.push(data.Y_ab);
+      // Y_bc.push(data.Y_bc);
       Y.push(data.Y_y);
     }
 
