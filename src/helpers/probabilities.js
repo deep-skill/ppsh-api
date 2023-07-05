@@ -1,18 +1,18 @@
-const { Location, W_one, Zer0, Zer1, Zer2, Zer3, Zer4,
+const { W_one, Zer0, Zer1, Zer2, Zer3, Zer4,
   Zer5, Zer6, Zer7 } = require("../db");
 const getPolygon = require("./getPolygon");
 const getDBCoordinates = require("./getDBCoordinates");
 const getDBPolygons = require("./getDBPolygons");
 
 
-const probabilities = async (location, period) => {
+const probabilities = async (lat, long, location, period) => {
 
   let coordinates = [];
   let polygons = [];
   let zer_data;
-  // let sum;
   let result = [];
   let X = [];
+  // let sum;
   // let Y_y = [];
   // let Y_z = [];
   // let Y_mc = [];
@@ -21,12 +21,9 @@ const probabilities = async (location, period) => {
   let Y = [];
 
   try {
-    const locationData = await Location.findByPk(location);
-
-    if (!locationData) throw {status: 404, message: "There is no information in the DB with this location ID"};
-
-    const latitude = locationData.latitude;
-    const longitude = locationData.longitude;
+    
+    const latitude = lat;
+    const longitude = long;
 
     coordinates = await getDBCoordinates(1);
 

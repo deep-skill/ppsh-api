@@ -1,8 +1,8 @@
 const hazard = require("../helpers/hazard");
 
-const getUniformHazardSpectrum = async (location, tr) => {
+const getUniformHazardSpectrum = async (lat, long, location, tr) => {
   const result = [];
-  const hazardValues = await hazard(location, tr);
+  const hazardValues = await hazard(lat, long, location, tr);
 
   for (let key in hazardValues) {
     if (hazardValues.hasOwnProperty(key)) {

@@ -1,12 +1,15 @@
 const getDesignSpectrum = require("../controllers/getDesignSpectrum");
 
 const getDesignSpectrumHandler = async (req, res) => {
-  const { location, standardType, soilType } = req.query;
+  let { lat, long , location, standardType, soilType } = req.query;
   
   try {
-    if (!location || !standardType || !soilType) throw { status: 400, message: "Missing location, standard type, or soil type information" };
+    if (!lat || !long || !location || !standardType || !soilType) throw { status: 400, message: "Missing location, standard type, or soil type information" };
     
-    const response = await getDesignSpectrum(location, standardType, soilType);
+    lat = parseInt(lat * 10) / 10;
+    long = parseInt(long * 10) / 10;
+
+    const response = await getDesignSpectrum(lat, long, location, standardType, soilType);
     if (!response) throw { status: 404, message: "There is no information in the DB with this location, standardType or soilType" };
     
     const result = {

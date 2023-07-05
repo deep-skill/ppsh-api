@@ -37,11 +37,11 @@ const fa = (Ss, tp) => {
 	return F[tp][4];
 };
 
-const ibc = async (location, soilType) => {
-	let prob = await probabilities(location, 0.2);
+const ibc = async (lat, long, location, soilType) => {
+	let prob = await probabilities(lat, long, location, 0.2);
 	let Ss = interpolation(prob, 1.0 / 2475.0); //PGA1
 
-	let prob2 = await probabilities(location, 1.0);
+	let prob2 = await probabilities(lat, long, location, 1.0);
 	let Sl = interpolation(prob2, 1.0 / 2475.0); //PGA2
 
 	let Fv = fv(Sl, soilType);

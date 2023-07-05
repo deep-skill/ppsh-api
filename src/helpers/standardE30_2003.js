@@ -1,17 +1,14 @@
-const { Location } = require("../db");
 const getPolygon = require("./getPolygon");
 const getDBCoordinates = require("./getDBCoordinates");
 const getDBPolygons = require("./getDBPolygons");
 const getPeriodArray = require("./getPeriodArray");
 
-const standardE30_2003 = async (location, soilType) => {
+const standardE30_2003 = async (lat, long, soilType) => {
   try {
-    const locationData = await Location.findByPk(location);
-    if (!locationData) throw { status: 404, message: "There is no information in the DB with this location ID" };
 
-    const latitude = locationData.latitude;
-    const longitude = locationData.longitude;
-
+    const latitude = lat;
+    const longitude = long;
+    
     const polygons = await getDBPolygons(3);
 
     const coordinates = await getDBCoordinates(3);
