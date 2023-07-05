@@ -5,7 +5,6 @@ const getUniformHazardSpectrumHandler = async (req, res) => {
 
   try {
     if (!location || !tr) throw { status: 400, message: "Missed location or tr" };
-
     if (+tr > 10000) throw { status: 400, message: "The return time cannot exceed 10,000 years" };
 
     const response = await getUniformHazardSpectrum(location, tr);

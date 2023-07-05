@@ -1,11 +1,13 @@
 const getLocations = require("../controllers/getLocations");
 
 const getLocationsHandler = async (req, res) => {
-  const { lat, long } = req.query;
+  let { lat, long } = req.query;
 
   try {
     if (!lat || !long) throw { status: 400, message: "Missed latitude or longitude" };
-
+    lat = parseInt(lat)
+    long = parseInt(long)
+    
     const response = await getLocations(lat, long);
 
     if (!response) throw { status: 404, message: "There is no information in the DB with this latitude or longitude" };
