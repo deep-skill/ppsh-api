@@ -1,13 +1,16 @@
 const getExceedanceProbability = require("../controllers/getExceedanceProbability");
 
 const getExceedanceProbabilityHandler = async (req, res) => {
-  let { location, period } = req.query;
+  let { lat, long, location, period } = req.query;
 
   try {
-    if (!location || !period) throw { status: 400, message: "Missed location or period." };
-    period = parseInt(period);
+    if (!lat || !long || !location || !period) throw { status: 400, message: "Missed location or period." };
+    if(period.slice(period.length-1) == 0) period = parseInt(period * 10) / 10;
 
-    const response = await getExceedanceProbability(location, period);
+    lat = parseInt(lat * 10) / 10;
+    long = parseInt(long * 10) / 10;
+
+    const response = await getExceedanceProbability(lat, long, location, period);
 
     if (!response) throw {status: 404, message: "There is no information in the DB with this location or period."};
 

@@ -5,8 +5,9 @@ const getLocationsHandler = async (req, res) => {
 
   try {
     if (!lat || !long) throw { status: 400, message: "Missed latitude or longitude" };
-    lat = parseInt(lat)
-    long = parseInt(long)
+    
+    lat = parseInt(lat * 10) / 10;
+    long = parseInt(long * 10) / 10;
     
     const response = await getLocations(lat, long);
 

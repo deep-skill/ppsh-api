@@ -1,7 +1,7 @@
 const probabilities = require("../helpers/probabilities");
 
-const getExceedanceProbability = async (location, period) => {
-  const result = await probabilities(location, period);
+const getExceedanceProbability = async (lat, long, location, period) => {
+  const result = await probabilities(lat, long, location, period);
 
   return result;
 };

@@ -4,22 +4,22 @@ const standardE30_2015_esp = require("../helpers/standardE30_2015Spec");
 const ibc = require("../helpers/ibc");
 const asce = require("../helpers/asce");
 
-const getDesignSpectrum = async (location, type, soilType) => {
+const getDesignSpectrum = async (lat, long, location, type, soilType) => {
   let resultData = [];
   let result = [];
 
   try {
 
     if (type === "e30_2003" && soilType < 3) {
-      resultData = await standardE30_2003(location, soilType);
+      resultData = await standardE30_2003(lat, long, soilType);
     } else if (type === "e30_2015" && soilType < 4) {
-      resultData = await standardE30_2015(location, soilType);
+      resultData = await standardE30_2015(lat, long, soilType);
     } else if (type === "e30_2015_esp" && soilType < 4) {
-      resultData = await standardE30_2015_esp(location, soilType);
+      resultData = await standardE30_2015_esp(lat, long, location, soilType);
     } else if (type === "ibc" && soilType < 5) {
-      resultData = await ibc(location, soilType);
+      resultData = await ibc(lat, long, location, soilType);
     } else if (type === "asce" && soilType < 5) {
-      resultData = await asce(location, soilType);
+      resultData = await asce(lat, long, location, soilType);
     } else {
       throw { status: 400, message: "The provided soilType or standardType is invalid" };
     }

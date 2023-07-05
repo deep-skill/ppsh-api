@@ -1,4 +1,3 @@
-const { Location } = require("../db");
 const getPolygon = require("./getPolygon");
 const getDBCoordinates = require("./getDBCoordinates");
 const getDBPolygons = require("./getDBPolygons");
@@ -6,13 +5,11 @@ const getPeriodArray = require("./getPeriodArray");
 const probabilities = require("./probabilities");
 const interpolation = require("./interpolation");
 
-const standardE30_2015Spe = async (location, soilType) => {
+const standardE30_2015Spe = async (lat, long, location, soilType) => {
   try {
-    const locationData = await Location.findByPk(location);
-    if (!locationData) throw { status: 404, message: "There is no information in the DB with this location ID" };
 
-    const latitude = locationData.latitude;
-    const longitude = locationData.longitude;
+    const latitude = lat;
+    const longitude = long;
 
     const polygons = await getDBPolygons(2);
 
@@ -53,7 +50,7 @@ const standardE30_2015Spe = async (location, soilType) => {
         break;
     }
 
-    const prob = await probabilities(location, period);
+    const prob = await probabilities(lat, long, location, period);
     let PGA = interpolation(prob, 1.0 / 475.0);
     if (PGA < 0.08) PGA = 0.08;
 

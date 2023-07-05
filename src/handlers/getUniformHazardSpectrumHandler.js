@@ -1,13 +1,16 @@
 const getUniformHazardSpectrum = require("../controllers/getUniformHazardSpectrum");
 
 const getUniformHazardSpectrumHandler = async (req, res) => {
-  const { location, tr } = req.query;
+  let { lat, long, location, tr } = req.query;
 
   try {
-    if (!location || !tr) throw { status: 400, message: "Missed location or tr" };
+    if (!lat || !long || !location || !tr) throw { status: 400, message: "Missed location or tr" };
     if (+tr > 10000) throw { status: 400, message: "The return time cannot exceed 10,000 years" };
+    
+    lat = parseInt(lat * 10) / 10;
+    long = parseInt(long * 10) / 10;
 
-    const response = await getUniformHazardSpectrum(location, tr);
+    const response = await getUniformHazardSpectrum(lat, long, location, tr);
 
     if (!response) throw {status: 404, message: "There is no information in the DB with this location or 'tr'"};
 
