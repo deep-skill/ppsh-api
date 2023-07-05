@@ -1,10 +1,11 @@
 const getExceedanceProbability = require("../controllers/getExceedanceProbability");
 
 const getExceedanceProbabilityHandler = async (req, res) => {
-  const { location, period } = req.query;
+  let { location, period } = req.query;
 
   try {
     if (!location || !period) throw { status: 400, message: "Missed location or period." };
+    period = parseInt(period);
 
     const response = await getExceedanceProbability(location, period);
 
